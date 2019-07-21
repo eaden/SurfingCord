@@ -36,6 +36,10 @@ public class Movement_Player : MonoBehaviour {
             transform.position = new Vector3(6, pos.y, pos.z);
         if (transform.position.x < -6)
             transform.position = new Vector3(-6, pos.y, pos.z);
+        if (transform.position.z > 4.1f)
+            transform.position = new Vector3(pos.x, pos.y, 4.1f);
+        if (transform.position.z < -4.1f)
+            transform.position = new Vector3(pos.x, pos.y, -4.1f);
 
         //--Reset direction--//
         _dir.x = 0;
