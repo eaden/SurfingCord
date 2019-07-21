@@ -20,15 +20,22 @@ public class Movement_Player : MonoBehaviour {
     bool movingDown = false;
     float speedHorizontal = 0;
     float speedVertical = 0;
+    Vector3 pos;
 
     // Use this for initialization
     void Start () {
         if(!rigid)
         rigid = GetComponent<Rigidbody>();
+        pos = transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        pos = transform.position;
+        if (transform.position.x > 6)
+            transform.position = new Vector3(6, pos.y, pos.z);
+        if (transform.position.x < -6)
+            transform.position = new Vector3(-6, pos.y, pos.z);
 
         //--Reset direction--//
         _dir.x = 0;
