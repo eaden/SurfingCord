@@ -12,8 +12,12 @@ public class Movement_Player : MonoBehaviour {
     float speedRight= 0;
     float speedUp = 0;
     float speedDown = 0;
-    float upper = 6;
+    float upper = 7;
+    float downer = 6;
+    float maxSpeed = 200f;
+
     bool isMoving = false;
+    bool isJumping = false;
     bool movingLeft = false;
     bool movingRight = false;
     bool movingUp = false;
@@ -22,15 +26,25 @@ public class Movement_Player : MonoBehaviour {
     float speedVertical = 0;
     Vector3 pos;
 
+    float jumpSquare_set = 2;
+    float jumpSquare = 2;
+    bool jumpIsBeginning = false;
+    bool jumpIsEnding = false;
+    Vector3 jumpVector = new Vector3(0, -0.01f, 0);
+    float forCos = 0;
+
     // Use this for initialization
     void Start () {
         if(!rigid)
         rigid = GetComponent<Rigidbody>();
         pos = transform.position;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+
+        jumpSquare_set = 2;
+        jumpSquare = jumpSquare_set;
+    }
+
+    // Update is called once per frame
+    void Update () {
         pos = transform.position;
         if (transform.position.x > 6)
             transform.position = new Vector3(6, pos.y, pos.z);
@@ -50,9 +64,56 @@ public class Movement_Player : MonoBehaviour {
         movingRight = false;
         movingUp = false;
         movingDown = false;
-
+        /*
+        if (Input.GetKey(KeyCode.Z))
+            transform.position = new Vector3(pos.x, 3, pos.z);
+        if (Input.GetKey(KeyCode.H))
+            transform.position = new Vector3(pos.x, 0.1f, pos.z);
+        */
         //--Update user input--//
-        if (Input.GetKey(KeyCode.UpArrow))
+
+
+        // jumping
+        if (!isJumping && Input.GetKey(KeyCode.Space))
+        {
+            isJumping = true;
+        }
+        if(isJumping)
+        {
+            transform.Translate(new Vector3(0,0.1f*Mathf.Cos(forCos)*1.5f, 0));
+            forCos += Time.deltaTime*3.7f;
+            if (forCos > 3.1f)
+            {
+                transform.position = new Vector3(pos.x, 0.1f, pos.z);
+                forCos = 0;
+                isJumping = false;
+            }
+
+            //if (transform.position.y > 2)
+            //    jumpIsEnding = true;
+            /*
+            if (jumpIsEnding)
+            {
+                transform.Translate(jumpVector* jumpSquare);
+                jumpSquare *= 1.05f;
+            }
+            if(transform.position.y < 0.1f)
+            {
+                transform.position = new Vector3(pos.x, 0.1f, pos.z);
+                isJumping = false;
+                jumpIsEnding = false;
+                jumpSquare = jumpSquare_set;
+            }
+                */
+        }
+
+        // ducking
+        if (Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift))
+        {
+            
+        }
+
+        if (Input.GetKey(KeyCode.W))
         {
             _dir.z += 300;
             speedUp += upper;
@@ -60,7 +121,7 @@ public class Movement_Player : MonoBehaviour {
             movingUp = true;
         }
             
-         else if (Input.GetKey(KeyCode.DownArrow))
+         else if (Input.GetKey(KeyCode.S))
         {
             _dir.z -= 300;
             speedDown += upper;
@@ -68,7 +129,7 @@ public class Movement_Player : MonoBehaviour {
             movingDown = true;
         }
 
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.A))
         {
             _dir.x -= 300;
             speedLeft += upper;
@@ -76,7 +137,7 @@ public class Movement_Player : MonoBehaviour {
             movingLeft = true;
         }
             
-        else if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.D))
         {
             _dir.x += 300;
             speedRight += upper;
@@ -86,16 +147,16 @@ public class Movement_Player : MonoBehaviour {
         if(!movingDown  && !movingUp && !movingLeft && !movingRight)
             isMoving = false;
 
-        if (speed > 180)
-            speed = 180;
-        if (speedLeft > 180)
-            speedLeft = 180;
-        if (speedRight > 180)
-            speedRight = 180;
-        if (speedUp > 180)
-            speedUp = 180;
-        if (speedDown > 180)
-            speedDown = 180;
+        if (speed > maxSpeed)
+            speed = maxSpeed;
+        if (speedLeft > maxSpeed)
+            speedLeft = maxSpeed;
+        if (speedRight > maxSpeed)
+            speedRight = maxSpeed;
+        if (speedUp > maxSpeed)
+            speedUp = maxSpeed;
+        if (speedDown > maxSpeed)
+            speedDown = maxSpeed;
 
         if (movingLeft)
             speedHorizontal = speedLeft;
@@ -121,25 +182,25 @@ public class Movement_Player : MonoBehaviour {
         }*/
         if (movingLeft)
         {
-            speedRight -= 6;
+            speedRight -= downer;
             if (speedRight < 20)
                 speedRight = 20;
         }
         if (movingRight)
         {
-            speedLeft -= 6;
+            speedLeft -= downer;
             if (speedLeft < 20)
                 speedLeft = 20;
         }
         if (movingUp)
         {
-            speedDown -= 6;
+            speedDown -= downer;
             if (speedDown < 20)
                 speedDown = 20;
         }
         if (movingDown)
         {
-            speedUp -= 6;
+            speedUp -= downer;
             if (speedUp < 20)
                 speedUp = 20;
         }
@@ -154,16 +215,16 @@ public class Movement_Player : MonoBehaviour {
         else
         {
             rigid.velocity *= 0.95f;
-            speedLeft -= 6;
+            speedLeft -= downer;
             if (speedLeft < 20)
                 speedLeft = 20;
-            speedRight -= 6;
+            speedRight -= downer;
             if (speedRight < 20)
                 speedRight = 20;
-            speedUp -= 6;
+            speedUp -= downer;
             if (speedUp < 20)
                 speedUp = 20;
-            speedDown -= 6;
+            speedDown -= downer;
             if (speedDown < 20)
                 speedDown = 20;
             /*
