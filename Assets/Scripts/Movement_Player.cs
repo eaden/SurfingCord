@@ -197,7 +197,7 @@ public class Movement_Player : MonoBehaviour {
         }
 
         // ducking
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !isJumping)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !isJumping && !isDucking)
         {
             isDucking = true;
             hitZoneBody.transform.position = new Vector3(hitZoneBodyPos.x, -1, hitZoneBodyPos.z);
