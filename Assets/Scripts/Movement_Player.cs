@@ -107,7 +107,7 @@ public class Movement_Player : MonoBehaviour {
         GameManager.time = 0;
         timer = 0;
 
-        instantiationTimer_limit = 10f;
+        instantiationTimer_limit = 12f;
         instantiationTimer = 10;
 
         bodyParts.Add(head);
@@ -128,6 +128,8 @@ public class Movement_Player : MonoBehaviour {
     {
            
     }
+
+    int tt = 0;
 
     // Update is called once per frame
     void Update () {
@@ -151,10 +153,15 @@ public class Movement_Player : MonoBehaviour {
             duckText.gameObject.SetActive(false);
         }
 
-        if(instantiationTimer<0)
+        if (instantiationTimer < 0)
         {
             instantiationTimer = instantiationTimer_limit;
-            Instantiate(prefabs[Random.Range(0,12)], new Vector3(19.98f, -1.712891f, 0.7753906f), Quaternion.identity);
+            int rando = Random.Range(0, 12);
+            //Instantiate(prefabs[Random.Range(0, 12)], new Vector3(19.98f, -1.712891f, 0.7753906f), Quaternion.identity);
+            //Instantiate(prefabs[Random.Range(2,3)], new Vector3(19.98f, -1.712891f, 0.7753906f), Quaternion.identity);
+            //Instantiate(prefabs[tt], new Vector3(19.98f, -1.712891f, 0.7753906f), prefabs[tt].transform.rotation);
+
+            Instantiate(prefabs[rando], new Vector3(19.98f, -1.712891f, 0.7753906f), prefabs[rando].transform.rotation);
         }
 
 
