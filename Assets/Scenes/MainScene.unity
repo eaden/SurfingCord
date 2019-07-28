@@ -1532,6 +1532,7 @@ MonoBehaviour:
   rightHand: {fileID: 1012761265}
   leftLeg: {fileID: 16999836}
   rightLeg: {fileID: 233930709}
+  hitZoneBody: {fileID: 1184027678}
   isHit: 0
 --- !u!65 &1895774526
 BoxCollider:
