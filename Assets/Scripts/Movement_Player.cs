@@ -20,6 +20,8 @@ public class Movement_Player : MonoBehaviour {
     public GameObject rightLeg;
     public GameObject hitZoneBody;
 
+    public GameObject evilCord;
+
     List<GameObject> bodyParts = new List<GameObject>();
 
     public GameObject[] prefabs = new GameObject[12];
@@ -106,10 +108,10 @@ public class Movement_Player : MonoBehaviour {
 
         lives = 6;
         GameManager.time = 0;
-        timer = 95;
+        timer = 0;
 
         instantiationTimer_limit = 12f;
-        instantiationTimer = 10;
+        instantiationTimer = 15;
 
         bodyParts.Add(head);
         bodyParts.Add(body);
@@ -121,7 +123,7 @@ public class Movement_Player : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if(!isHit)
+        if (!isHit && other.gameObject.tag != "Player")
             isHit = true;
     }
 
@@ -129,8 +131,6 @@ public class Movement_Player : MonoBehaviour {
     {
            
     }
-
-    int tt = 0;
 
     // Update is called once per frame
     void Update () {
@@ -155,7 +155,11 @@ public class Movement_Player : MonoBehaviour {
         }
 
         if (timer > 100 && timer < 110)
+        {
             evilText.gameObject.SetActive(true);
+            evilCord.SetActive(true);
+        }
+            
         else
             evilText.gameObject.SetActive(false);
 
@@ -299,8 +303,11 @@ public class Movement_Player : MonoBehaviour {
 
         }
 
-        // ducking
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !isJumping && !isDucking)
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
+
+            // ducking
+            if (Input.GetKeyDown(KeyCode.LeftShift) && !isJumping && !isDucking)
         {
             isDucking = true;
             hitZoneBody.transform.position = new Vector3(hitZoneBodyPos.x, -1, hitZoneBodyPos.z);

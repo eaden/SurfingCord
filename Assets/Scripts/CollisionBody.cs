@@ -8,7 +8,7 @@ public class CollisionBody : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!playerScript.isHit)
+        if (!playerScript.isHit && other.gameObject.tag != "Player")
             playerScript.isHit = true;
     }
 
