@@ -26,6 +26,7 @@ public class Movement_Player : MonoBehaviour {
     float maxSpeed = 200f;
 
     public bool isHit = false;
+    bool isDucking = false;
 
     bool isMoving = false;
     bool isJumping = false;
@@ -44,6 +45,9 @@ public class Movement_Player : MonoBehaviour {
     Vector3 jumpVector = new Vector3(0, -0.01f, 0);
     float forCos = 0;
 
+    float duckingTimer;
+    float duckingTimer_limit;
+
     float hitTimer;
     float hitTimer_limit;
 
@@ -59,6 +63,8 @@ public class Movement_Player : MonoBehaviour {
         hitTimer_limit = 1f;
         hitTimer = hitTimer_limit;
 
+        duckingTimer_limit = 1f;
+        duckingTimer = duckingTimer_limit;
 
 
         bodyParts.Add(head);
@@ -147,7 +153,7 @@ public class Movement_Player : MonoBehaviour {
 
 
         // jumping
-        if (!isJumping && Input.GetKey(KeyCode.Space))
+        if (!isJumping && Input.GetKey(KeyCode.Space) && !isDucking)
         {
             isJumping = true;
         }
@@ -161,13 +167,27 @@ public class Movement_Player : MonoBehaviour {
                 forCos = 0;
                 isJumping = false;
             }
+
         }
 
         // ducking
-        if (Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && !isJumping)
         {
-            
+            isDucking = true;
+            transform.position = new Vector3(pos.x, -1, pos.z);
         }
+        if(isDucking)
+        {
+            duckingTimer -= Time.deltaTime;
+            if(duckingTimer < 0)
+            {
+                transform.position = new Vector3(pos.x, 0.08f, pos.z);
+                isDucking = false;
+                duckingTimer = duckingTimer_limit;
+            }
+
+        }
+        
 
         if (Input.GetKey(KeyCode.W))
         {
