@@ -10,6 +10,7 @@ public class Movement_Player : MonoBehaviour {
     public Text moveText;
     public Text jumpText;
     public Text duckText;
+    public Text evilText;
 
     public GameObject head;
     public GameObject body;
@@ -105,7 +106,7 @@ public class Movement_Player : MonoBehaviour {
 
         lives = 6;
         GameManager.time = 0;
-        timer = 0;
+        timer = 95;
 
         instantiationTimer_limit = 12f;
         instantiationTimer = 10;
@@ -152,6 +153,11 @@ public class Movement_Player : MonoBehaviour {
         {
             duckText.gameObject.SetActive(false);
         }
+
+        if (timer > 100 && timer < 110)
+            evilText.gameObject.SetActive(true);
+        else
+            evilText.gameObject.SetActive(false);
 
         if (instantiationTimer < 0)
         {
