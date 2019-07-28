@@ -21,6 +21,8 @@ public class Movement_Player : MonoBehaviour {
 
     List<GameObject> bodyParts = new List<GameObject>();
 
+    public GameObject[] prefabs = new GameObject[12];
+
     Vector3 _dir = Vector3.zero;
     Vector3 velocitySave = Vector3.zero;
     Rigidbody rigid = null;
@@ -73,6 +75,9 @@ public class Movement_Player : MonoBehaviour {
 
     float timer = 0;
 
+    float instantiationTimer_limit;
+    float instantiationTimer;
+
     // Use this for initialization
     void Start () {
         if(!rigid)
@@ -102,6 +107,8 @@ public class Movement_Player : MonoBehaviour {
         GameManager.time = 0;
         timer = 0;
 
+        instantiationTimer_limit = 10f;
+        instantiationTimer = 10;
 
         bodyParts.Add(head);
         bodyParts.Add(body);
@@ -125,6 +132,7 @@ public class Movement_Player : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         timer += Time.deltaTime;
+        instantiationTimer -= Time.deltaTime;
         text.text = "Score: " + (int)timer;
         if (timer < 8)
             moveText.gameObject.SetActive(true);
@@ -141,6 +149,12 @@ public class Movement_Player : MonoBehaviour {
         else if (timer > 32)
         {
             duckText.gameObject.SetActive(false);
+        }
+
+        if(instantiationTimer<0)
+        {
+            instantiationTimer = instantiationTimer_limit;
+            Instantiate(prefabs[Random.Range(0,12)], new Vector3(19.98f, -1.712891f, 0.7753906f), Quaternion.identity);
         }
 
 
