@@ -25,7 +25,7 @@ public class Movement_Player : MonoBehaviour {
     float downer = 6;
     float maxSpeed = 200f;
 
-    bool isHit = false;
+    public bool isHit = false;
 
     bool isMoving = false;
     bool isJumping = false;
