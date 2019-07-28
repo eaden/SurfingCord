@@ -10,6 +10,7 @@ public class Movement_Player : MonoBehaviour {
     public GameObject rightHand;
     public GameObject leftLeg;
     public GameObject rightLeg;
+    public GameObject hitZoneBody;
 
     List<GameObject> bodyParts = new List<GameObject>();
 
@@ -36,7 +37,16 @@ public class Movement_Player : MonoBehaviour {
     bool movingDown = false;
     float speedHorizontal = 0;
     float speedVertical = 0;
+    Vector3 hitZoneBodyOriginalPos;
+    Vector3 hitZoneBodyPos;
+    Vector3 originalPos;
     Vector3 pos;
+    Vector3 headOriginalPos;
+    Vector3 bodyOriginalPos;
+    Vector3 leftHandOriginalPos;
+    Vector3 rightHandOriginalPos;
+    Vector3 leftLegOriginalPos;
+    Vector3 rightLegOriginalPos;
 
     float jumpSquare_set = 2;
     float jumpSquare = 2;
@@ -55,7 +65,17 @@ public class Movement_Player : MonoBehaviour {
     void Start () {
         if(!rigid)
         rigid = GetComponent<Rigidbody>();
-        pos = transform.position;
+        originalPos = transform.position;
+        pos = originalPos;
+        hitZoneBodyOriginalPos = hitZoneBody.transform.position;
+        hitZoneBodyPos = hitZoneBodyOriginalPos;
+
+        headOriginalPos = head.transform.position;
+        bodyOriginalPos = body.transform.position;
+        leftHandOriginalPos = leftHand.transform.position; ;
+        rightHandOriginalPos = rightHand.transform.position; ;
+        leftLegOriginalPos = leftLeg.transform.position; ;
+        rightLegOriginalPos = rightLeg.transform.position; ;
 
         jumpSquare_set = 2;
         jumpSquare = jumpSquare_set;
@@ -80,9 +100,15 @@ public class Movement_Player : MonoBehaviour {
         isHit = true;
     }
 
+    private void LateUpdate()
+    {
+           
+    }
+
     // Update is called once per frame
     void Update () {
         pos = transform.position;
+        hitZoneBodyPos = hitZoneBody.transform.position;
         if (transform.position.x > 6)
             transform.position = new Vector3(6, pos.y, pos.z);
         if (transform.position.x < -6)
@@ -171,17 +197,26 @@ public class Movement_Player : MonoBehaviour {
         }
 
         // ducking
-        if (Input.GetKey(KeyCode.LeftShift) && !isJumping)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !isJumping)
         {
             isDucking = true;
-            transform.position = new Vector3(pos.x, -1, pos.z);
+            hitZoneBody.transform.position = new Vector3(hitZoneBodyPos.x, -1, hitZoneBodyPos.z);
+            head.transform.position = new Vector3(head.transform.position.x, head.transform.position.y - 0.6f, head.transform.position.z);
+            body.transform.position = new Vector3(body.transform.position.x, body.transform.position.y - 0.6f, body.transform.position.z);
+            leftHand.transform.position = new Vector3(leftHand.transform.position.x, leftHand.transform.position.y - 0.6f, leftHand.transform.position.z);
+            rightHand.transform.position = new Vector3(rightHand.transform.position.x, rightHand.transform.position.y - 0.6f, rightHand.transform.position.z);
         }
         if(isDucking)
         {
             duckingTimer -= Time.deltaTime;
             if(duckingTimer < 0)
             {
-                transform.position = new Vector3(pos.x, 0.08f, pos.z);
+                hitZoneBody.transform.position = new Vector3(hitZoneBodyPos.x, hitZoneBodyOriginalPos.y, hitZoneBodyPos.z);
+                head.transform.position = new Vector3(head.transform.position.x, head.transform.position.y + 0.6f, head.transform.position.z);
+                body.transform.position = new Vector3(body.transform.position.x, body.transform.position.y + 0.6f, body.transform.position.z);
+                leftHand.transform.position = new Vector3(leftHand.transform.position.x, leftHand.transform.position.y + 0.6f, leftHand.transform.position.z);
+                rightHand.transform.position = new Vector3(rightHand.transform.position.x, rightHand.transform.position.y + 0.6f, rightHand.transform.position.z);
+
                 isDucking = false;
                 duckingTimer = duckingTimer_limit;
             }
