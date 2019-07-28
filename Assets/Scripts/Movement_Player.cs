@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Movement_Player : MonoBehaviour {
 
@@ -64,6 +65,8 @@ public class Movement_Player : MonoBehaviour {
     float hitTimer;
     float hitTimer_limit;
 
+    float timer = 0;
+
     // Use this for initialization
     void Start () {
         if(!rigid)
@@ -89,6 +92,10 @@ public class Movement_Player : MonoBehaviour {
         duckingTimer_limit = 1f;
         duckingTimer = duckingTimer_limit;
 
+        lives = 6;
+        GameManager.time = 0;
+        timer = 0;
+
 
         bodyParts.Add(head);
         bodyParts.Add(body);
@@ -111,6 +118,7 @@ public class Movement_Player : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        timer += Time.deltaTime;
         pos = transform.position;
         hitZoneBodyPos = hitZoneBody.transform.position;
         if (transform.position.x > 6)
@@ -131,8 +139,6 @@ public class Movement_Player : MonoBehaviour {
         movingRight = false;
         movingUp = false;
         movingDown = false;
-
-        print(bodyParts.Count);
         /*
         if (Input.GetKey(KeyCode.Z))
             transform.position = new Vector3(pos.x, 3, pos.z);
@@ -171,9 +177,11 @@ public class Movement_Player : MonoBehaviour {
                         Destroy(body);
                         break;
                     case 0:
-                        bodyParts.RemoveAt(bodyParts.Count - 1);
-                        Destroy(head);
+                        //bodyParts.RemoveAt(bodyParts.Count - 1);
+                        //Destroy(head);
                         // you LOSE
+                        GameManager.time = (int)timer;
+                        SceneManager.LoadScene(2);
                         break;
                     default:
                         print("an error occured");
