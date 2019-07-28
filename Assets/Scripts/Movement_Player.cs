@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class Movement_Player : MonoBehaviour {
 
+    public GameObject head;
+    public GameObject body;
+    public GameObject leftHand;
+    public GameObject rightHand;
+    public GameObject leftLeg;
+    public GameObject rightLeg;
+
+    List<GameObject> bodyParts = new List<GameObject>();
+
     Vector3 _dir = Vector3.zero;
     Vector3 velocitySave = Vector3.zero;
     Rigidbody rigid = null;
@@ -15,6 +24,8 @@ public class Movement_Player : MonoBehaviour {
     float upper = 7;
     float downer = 6;
     float maxSpeed = 200f;
+
+    bool isHit = false;
 
     bool isMoving = false;
     bool isJumping = false;
@@ -33,6 +44,9 @@ public class Movement_Player : MonoBehaviour {
     Vector3 jumpVector = new Vector3(0, -0.01f, 0);
     float forCos = 0;
 
+    float hitTimer;
+    float hitTimer_limit;
+
     // Use this for initialization
     void Start () {
         if(!rigid)
@@ -41,6 +55,23 @@ public class Movement_Player : MonoBehaviour {
 
         jumpSquare_set = 2;
         jumpSquare = jumpSquare_set;
+
+        hitTimer_limit = 1f;
+        hitTimer = hitTimer_limit;
+
+
+
+        bodyParts.Add(head);
+        bodyParts.Add(body);
+        bodyParts.Add(leftHand);
+        bodyParts.Add(rightHand);
+        bodyParts.Add(leftLeg);
+        bodyParts.Add(rightLeg);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        isHit = true;
     }
 
     // Update is called once per frame
@@ -71,6 +102,48 @@ public class Movement_Player : MonoBehaviour {
             transform.position = new Vector3(pos.x, 0.1f, pos.z);
         */
         //--Update user input--//
+
+        // Player is hit
+        if (isHit)
+        {
+            hitTimer -= Time.deltaTime;
+
+            if (hitTimer < 0)
+            {
+                isHit = false;
+                hitTimer = hitTimer_limit;
+                foreach (var item in bodyParts)
+                {
+                    item.GetComponent<MeshRenderer>().enabled = true;
+                }
+            }
+            if (hitTimer < 0.2f)
+            foreach (var item in bodyParts)
+            {
+                item.GetComponent<MeshRenderer>().enabled = false;
+            }
+            else if (hitTimer < 0.4f)
+                foreach (var item in bodyParts)
+                {
+                    item.GetComponent<MeshRenderer>().enabled = true;
+                }
+            else if (hitTimer < 0.6f)
+                foreach (var item in bodyParts)
+                {
+                    item.GetComponent<MeshRenderer>().enabled = false;
+                }
+            else if (hitTimer < 0.8f)
+                foreach (var item in bodyParts)
+                {
+                    item.GetComponent<MeshRenderer>().enabled = true;
+                }
+            else if (hitTimer < 1f)
+                foreach (var item in bodyParts)
+                {
+                    item.GetComponent<MeshRenderer>().enabled = false;
+                }
+        }
+        
 
 
         // jumping
