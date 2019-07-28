@@ -1,9 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Movement_Player : MonoBehaviour {
+
+    public Text text;
+    public Text moveText;
+    public Text jumpText;
+    public Text duckText;
 
     public GameObject head;
     public GameObject body;
@@ -119,6 +125,25 @@ public class Movement_Player : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         timer += Time.deltaTime;
+        text.text = "Score: " + (int)timer;
+        if (timer < 8)
+            moveText.gameObject.SetActive(true);
+        else if(timer < 16)
+        {
+            moveText.gameObject.SetActive(false);
+            jumpText.gameObject.SetActive(true);
+        }
+        else if (timer < 24)
+        {
+            jumpText.gameObject.SetActive(false);
+            duckText.gameObject.SetActive(true);
+        }
+        else if (timer > 32)
+        {
+            duckText.gameObject.SetActive(false);
+        }
+
+
         pos = transform.position;
         hitZoneBodyPos = hitZoneBody.transform.position;
         if (transform.position.x > 6)
