@@ -6,8 +6,8 @@ public class Movement_Player : MonoBehaviour {
 
     public GameObject head;
     public GameObject body;
-    public GameObject leftHand;
-    public GameObject rightHand;
+    public GameObject leftArm;
+    public GameObject rightArm;
     public GameObject leftLeg;
     public GameObject rightLeg;
     public GameObject hitZoneBody;
@@ -26,8 +26,11 @@ public class Movement_Player : MonoBehaviour {
     float downer = 6;
     float maxSpeed = 200f;
 
+    int lives = 6;
+
     public bool isHit = false;
     bool isDucking = false;
+    bool hitJusthappend = true;
 
     bool isMoving = false;
     bool isJumping = false;
@@ -72,8 +75,8 @@ public class Movement_Player : MonoBehaviour {
 
         headOriginalPos = head.transform.position;
         bodyOriginalPos = body.transform.position;
-        leftHandOriginalPos = leftHand.transform.position; ;
-        rightHandOriginalPos = rightHand.transform.position; ;
+        leftHandOriginalPos = leftArm.transform.position; ;
+        rightHandOriginalPos = rightArm.transform.position; ;
         leftLegOriginalPos = leftLeg.transform.position; ;
         rightLegOriginalPos = rightLeg.transform.position; ;
 
@@ -89,15 +92,16 @@ public class Movement_Player : MonoBehaviour {
 
         bodyParts.Add(head);
         bodyParts.Add(body);
-        bodyParts.Add(leftHand);
-        bodyParts.Add(rightHand);
         bodyParts.Add(leftLeg);
         bodyParts.Add(rightLeg);
+        bodyParts.Add(leftArm);
+        bodyParts.Add(rightArm);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        isHit = true;
+        if(!isHit)
+            isHit = true;
     }
 
     private void LateUpdate()
@@ -127,6 +131,8 @@ public class Movement_Player : MonoBehaviour {
         movingRight = false;
         movingUp = false;
         movingDown = false;
+
+        print(bodyParts.Count);
         /*
         if (Input.GetKey(KeyCode.Z))
             transform.position = new Vector3(pos.x, 3, pos.z);
@@ -139,10 +145,47 @@ public class Movement_Player : MonoBehaviour {
         if (isHit)
         {
             hitTimer -= Time.deltaTime;
+            if(hitJusthappend)
+            {
+                lives--;
+                switch (lives)
+                {
+                    case 5:
+                        bodyParts.RemoveAt(bodyParts.Count - 1);
+                        Destroy(rightArm);
+                        break;
+                    case 4:
+                        bodyParts.RemoveAt(bodyParts.Count - 1);
+                        Destroy(leftArm);
+                        break;
+                    case 3:
+                        bodyParts.RemoveAt(bodyParts.Count - 1);
+                        Destroy(rightLeg);
+                        break;
+                    case 2:
+                        bodyParts.RemoveAt(bodyParts.Count - 1);
+                        Destroy(leftLeg);
+                        break;
+                    case 1:
+                        bodyParts.RemoveAt(bodyParts.Count - 1);
+                        Destroy(body);
+                        break;
+                    case 0:
+                        bodyParts.RemoveAt(bodyParts.Count - 1);
+                        Destroy(head);
+                        // you LOSE
+                        break;
+                    default:
+                        print("an error occured");
+                        break;
+                }
+            }
+            hitJusthappend = false;
 
             if (hitTimer < 0)
             {
                 isHit = false;
+                hitJusthappend = true;
                 hitTimer = hitTimer_limit;
                 foreach (var item in bodyParts)
                 {
@@ -201,10 +244,14 @@ public class Movement_Player : MonoBehaviour {
         {
             isDucking = true;
             hitZoneBody.transform.position = new Vector3(hitZoneBodyPos.x, -1, hitZoneBodyPos.z);
+            if(head)
             head.transform.position = new Vector3(head.transform.position.x, head.transform.position.y - 0.6f, head.transform.position.z);
+            if(body)
             body.transform.position = new Vector3(body.transform.position.x, body.transform.position.y - 0.6f, body.transform.position.z);
-            leftHand.transform.position = new Vector3(leftHand.transform.position.x, leftHand.transform.position.y - 0.6f, leftHand.transform.position.z);
-            rightHand.transform.position = new Vector3(rightHand.transform.position.x, rightHand.transform.position.y - 0.6f, rightHand.transform.position.z);
+            if(leftArm)
+            leftArm.transform.position = new Vector3(leftArm.transform.position.x, leftArm.transform.position.y - 0.6f, leftArm.transform.position.z);
+            if(rightArm)
+            rightArm.transform.position = new Vector3(rightArm.transform.position.x, rightArm.transform.position.y - 0.6f, rightArm.transform.position.z);
         }
         if(isDucking)
         {
@@ -212,10 +259,14 @@ public class Movement_Player : MonoBehaviour {
             if(duckingTimer < 0)
             {
                 hitZoneBody.transform.position = new Vector3(hitZoneBodyPos.x, hitZoneBodyOriginalPos.y, hitZoneBodyPos.z);
-                head.transform.position = new Vector3(head.transform.position.x, head.transform.position.y + 0.6f, head.transform.position.z);
-                body.transform.position = new Vector3(body.transform.position.x, body.transform.position.y + 0.6f, body.transform.position.z);
-                leftHand.transform.position = new Vector3(leftHand.transform.position.x, leftHand.transform.position.y + 0.6f, leftHand.transform.position.z);
-                rightHand.transform.position = new Vector3(rightHand.transform.position.x, rightHand.transform.position.y + 0.6f, rightHand.transform.position.z);
+                if (head)
+                    head.transform.position = new Vector3(head.transform.position.x, head.transform.position.y + 0.6f, head.transform.position.z);
+                if (body)
+                    body.transform.position = new Vector3(body.transform.position.x, body.transform.position.y + 0.6f, body.transform.position.z);
+                if (leftArm)
+                leftArm.transform.position = new Vector3(leftArm.transform.position.x, leftArm.transform.position.y + 0.6f, leftArm.transform.position.z);
+                if (rightArm)
+                    rightArm.transform.position = new Vector3(rightArm.transform.position.x, rightArm.transform.position.y + 0.6f, rightArm.transform.position.z);
 
                 isDucking = false;
                 duckingTimer = duckingTimer_limit;
