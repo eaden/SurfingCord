@@ -88,23 +88,6 @@ public class Movement_Player : MonoBehaviour {
                 forCos = 0;
                 isJumping = false;
             }
-
-            //if (transform.position.y > 2)
-            //    jumpIsEnding = true;
-            /*
-            if (jumpIsEnding)
-            {
-                transform.Translate(jumpVector* jumpSquare);
-                jumpSquare *= 1.05f;
-            }
-            if(transform.position.y < 0.1f)
-            {
-                transform.position = new Vector3(pos.x, 0.1f, pos.z);
-                isJumping = false;
-                jumpIsEnding = false;
-                jumpSquare = jumpSquare_set;
-            }
-                */
         }
 
         // ducking
@@ -169,17 +152,7 @@ public class Movement_Player : MonoBehaviour {
 
         //--Normalize vector--//
         _dir.Normalize();
-        //--Also possible--// 
-        //_dir = _dir.normalized;
-        
 
-
-        /*
-        if (_dir.x > 0.1f || _dir.z > 0.1f || _dir.x < -0.1f || _dir.z < -0.1f)
-        {
-            speed += 5;
-            rigid.velocity = _dir * speed * Time.deltaTime;
-        }*/
         if (movingLeft)
         {
             speedRight -= downer;
